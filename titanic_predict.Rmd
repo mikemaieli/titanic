@@ -1,0 +1,44 @@
+---
+title: "Titanic"
+output: html_document
+date: "2024-12-01"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Install packages
+```{r echo=FALSE}
+install.packages(c("tidyverse","titanic","janitor"))
+```
+
+Load packages
+```{r echo=FALSE}
+library(tidyverse)
+library(titanic)
+library(janitor)
+```
+
+Load data
+```{r}
+full_data <- titanic_train %>% bind_rows(titanic_test) %>% clean_names() %>% 
+    # convert survived and pclass to factors
+    mutate(survived = factor(survived, levels = c(0, 1), labels = c("No", "Yes")),
+         pclass = factor(pclass)) %>% 
+  drop_na(survived)
+```
+
+View Summary Stats
+```{r}
+full_data %>% 
+  summary()
+```
+
+C
+```{r}
+ggplot(full_data, aes(x = survived)) +
+  geom_bar() +
+  labs(title = "Survival Count", x = "Survived", y = "Count")
+```
+
